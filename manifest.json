@@ -1,0 +1,48 @@
+{
+  "name": "DELIMa 3.0 — Semakan ID & Kata Laluan Murid",
+  "short_name": "DELIMa ID",
+  "description": "Aplikasi mudah alih PWA untuk memudahkan ibu bapa mendapatkan ID DELIMa dan Kata Laluan murid SK Ranggu bagi portal DELIMa 3.0 KPM.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#1e40af",
+  "lang": "ms",
+  "categories": [
+    "education",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

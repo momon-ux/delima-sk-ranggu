@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded rectangle -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle border highlight -->
+  <rect x="4" y="4" width="504" height="504" rx="108" fill="none" stroke="#60a5fa" stroke-width="4" stroke-opacity="0.4"/>
+
+  <!-- Inner glow circle -->
+  <circle cx="256" cy="220" r="160" fill="#ffffff" fill-opacity="0.06"/>
+
+  <g filter="url(#shadow)">
+    <!-- Graduation Cap / Mortarboard -->
+    <path d="M256 95 L406 170 L256 245 L106 170 Z" fill="#ffffff"/>
+    <path d="M256 245 L376 185 L376 250 C376 295 322 335 256 335 C190 335 136 295 136 250 L136 185 Z" fill="#e0e7ff"/>
+    
+    <!-- Tassel -->
+    <path d="M140 180 L120 220 L120 280" stroke="url(#goldGrad)" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <circle cx="120" cy="285" r="8" fill="#f59e0b"/>
+
+    <!-- Key & Shield Icon on bottom (Symbolizing ID & Password access) -->
+    <!-- Open Book Base -->
+    <path d="M120 375 Q256 335 256 355 Q256 335 392 375 L392 420 Q256 385 256 400 Q256 385 120 420 Z" fill="#ffffff"/>
+    <path d="M256 355 L256 400" stroke="#93c5fd" stroke-width="4"/>
+  </g>
+
+  <!-- Key Emblem -->
+  <g transform="translate(256, 320) scale(0.9)" filter="url(#shadow)">
+    <circle cx="0" cy="0" r="28" fill="url(#goldGrad)"/>
+    <circle cx="0" cy="0" r="12" fill="#1e3a8a"/>
+    <rect x="-6" y="24" width="12" height="42" rx="4" fill="url(#goldGrad)"/>
+    <rect x="2" y="45" width="16" height="8" rx="2" fill="url(#goldGrad)"/>
+    <rect x="2" y="58" width="12" height="8" rx="2" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- Text "DELIMa 3.0" at bottom -->
+  <text x="256" y="475" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="34" fill="#ffffff" letter-spacing="4">DELIMa 3.0</text>
+</svg>
