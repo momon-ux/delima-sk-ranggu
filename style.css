@@ -243,10 +243,11 @@ body {
   flex-shrink: 0;
 }
 
+.hero-delima-logo,
 .hero-school-crest {
-  height: 94px;
+  height: 92px;
   width: auto;
-  max-width: 105px;
+  max-width: 100px;
   object-fit: contain;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
   animation: floatSoft 3.5s ease-in-out infinite;
