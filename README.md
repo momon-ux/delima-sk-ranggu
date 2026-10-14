@@ -130,6 +130,6 @@ Jika terdapat murid baharu berpindah masuk atau pertukaran kelas pada masa akan 
 ---
 
 ## 🛡️ Hak Cipta & Maklumat Pembangun
-- **Pembangun Sistem**: **Mohammad Fikrey bin Abdul Gapar** (@momon-ux / @FIKREYXCODE).
-- **Penyelaras**: Unit Pengurusan Data & ICT SK Ranggu, Tawau, Sabah (Kod Sekolah: XBA3037).
+- **Pembangun Sistem**: **Mohammad Fikrey bin Abdul Gapar** ([@momon-ux](https://github.com/momon-ux)).
+- **Aplikasi**: Sistem PWA Semakan ID & Kata Laluan Murid DELIMa 3.0 (SK Ranggu, Tawau).
 - **Pautan Rasmi DELIMa 3.0 KPM**: [https://d3.delima.edu.my/applications](https://d3.delima.edu.my/applications)

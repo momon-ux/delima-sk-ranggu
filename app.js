@@ -1,6 +1,6 @@
 // DELIMa 3.0 PWA Deluxe Engine & Logic
-// Pembangun Sistem: Mohammad Fikrey bin Abdul Gapar (momon-ux)
-// Unit Pengurusan Data & ICT SK Ranggu, Tawau (XBA3037)
+// Pembangun Sistem: Mohammad Fikrey bin Abdul Gapar (@momon-ux)
+// Aplikasi: DELIMa 3.0 Murid PWA (SK Ranggu, Tawau)
 
 document.addEventListener('DOMContentLoaded', () => {
   // 0. Safeguard: Pastikan logo hero sentiasa Logo Rasmi DELIMa 3.0 (elak cache lapuk Safari memaparkan lencana sekolah dua kali)
