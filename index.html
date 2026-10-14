@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Semakan ID & Kata Laluan DELIMa 3.0 Murid — SK Ranggu</title>
+  <title>Portal Semakan ID DELIMa 3.0 Murid — SK Ranggu Tawau</title>
   
-  <!-- SEO & Meta Info -->
-  <meta name="description" content="Aplikasi PWA untuk memudahkan ibu bapa mendapatkan ID DELIMa dan Kata Laluan anak-anak SK Ranggu (XBA3037) bagi log masuk Portal DELIMa 3.0 KPM.">
-  <meta name="author" content="SK Ranggu Tawau">
+  <!-- SEO & Meta -->
+  <meta name="description" content="Aplikasi PWA Rasmi SK Ranggu (XBA3037) untuk memudahkan ibu bapa menyemak ID DELIMa dan Kata Laluan murid bagi portal DELIMa 3.0 Kementerian Pendidikan Malaysia.">
+  <meta name="author" content="Momon (momon-ux) - Unit ICT SK Ranggu">
 
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1e40af">
+  <meta name="theme-color" content="#1e3a8a">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="DELIMa ID">
+  <meta name="apple-mobile-web-app-title" content="DELIMa SKRG">
   
-  <!-- Icons -->
+  <!-- App Icons -->
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png">
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 
   <link rel="stylesheet" href="style.css">
@@ -28,59 +29,138 @@
 
   <!-- Offline Warning Banner -->
   <div id="offlineIndicator" class="offline-indicator">
-    ⚡ Mod Luar Talian (Offline) Aktif — Anda masih boleh membuat semakan data murid.
+    ⚡ Mod Luar Talian (Offline) Aktif — Anda boleh menyemak rekod murid tanpa sambungan internet.
   </div>
 
-  <!-- Header Section -->
+  <!-- Header Section with Official Logos -->
   <header class="app-header">
+    <div class="header-glow"></div>
     <div class="header-container">
-      <div class="top-bar">
-        <div class="school-tag">
-          <span>🏫</span>
-          <span>SK Ranggu Tawau (XBA3037)</span>
+      
+      <!-- Institution Bar: Dual KPM & SK Ranggu Logos -->
+      <div class="institution-bar">
+        <div class="logos-group">
+          <div class="logo-badge" title="Kementerian Pendidikan Malaysia">
+            <img src="assets/logo-kpm.png" alt="Logo KPM" class="logo-img-kpm">
+          </div>
+          <div class="logo-badge" title="SK Ranggu Tawau">
+            <img src="assets/logo-skrg.png" alt="Logo SK Ranggu" class="logo-img-skrg">
+          </div>
+          <div class="institution-text">
+            <h2>Kementerian Pendidikan Malaysia</h2>
+            <p>SK Ranggu, Tawau • Kod: XBA3037</p>
+          </div>
         </div>
-        <div class="top-actions">
-          <button id="btnHeaderInstall" class="icon-btn" title="Pasang Aplikasi (PWA)" style="display:none;" aria-label="Pasang Aplikasi">
-            📲
+
+        <div class="header-top-actions">
+          <button id="btnHeaderInstall" class="pwa-chip-btn" title="Pasang Aplikasi ke Telefon" style="display:none;" aria-label="Pasang Aplikasi">
+            <span>📲</span>
+            <span>Pasang App</span>
           </button>
           <button id="btnHelp" class="icon-btn" title="Panduan Log Masuk DELIMa" aria-label="Panduan">
             ❓
           </button>
-          <button id="themeToggle" class="icon-btn" title="Tukar Mod Gelap/Cerah" aria-label="Tukar Tema">
+          <button id="themeToggle" class="icon-btn" title="Tukar Tema Cerah/Gelap" aria-label="Tukar Tema">
             🌙
           </button>
         </div>
       </div>
 
-      <div class="hero-content">
-        <img src="icons/icon-192.png" alt="DELIMa 3.0 Logo" class="app-logo">
-        <div class="hero-text">
-          <h1>DELIMa 3.0 Murid</h1>
-          <p>Sistem Semakan Pantas ID & Kata Laluan untuk Ibu Bapa</p>
-          <div class="quick-stats">
-            <span class="stat-pill">✨ 766 Murid</span>
-            <span class="stat-pill">📚 Tahun 1 - Tahun 6</span>
-            <span class="stat-pill">🔒 Luar Talian / PWA</span>
+      <!-- Hero Header with PWA 3D Logo -->
+      <div class="hero-box">
+        <img src="assets/logo-pwa.png" alt="Logo PWA DELIMa 3.0" class="pwa-main-logo">
+        <div class="hero-info">
+          <div id="greetingText" class="greeting-text">
+            <span>👋</span>
+            <span>Selamat Datang, Ibu Bapa & Murid SK Ranggu</span>
           </div>
+          <h1>Portal DELIMa 3.0 Murid</h1>
+          <p>Semakan Pantas ID Pembelajaran Digital & Kata Laluan Murid Sekolah</p>
         </div>
       </div>
+
     </div>
   </header>
 
-  <!-- Main Content Wrapper -->
+  <!-- Realtime Calendar & Digital Clock Widget Bar -->
+  <section class="realtime-bar" aria-label="Jam dan Kalendar Masa Nyata">
+    <div class="realtime-clock-group">
+      <div class="clock-live-dot" title="Masa Nyata Beroperasi"></div>
+      <div id="liveClock" class="clock-time">--:--:-- --</div>
+    </div>
+    <div class="clock-date-group">
+      <div id="liveDate" class="clock-date">Memuatkan tarikh...</div>
+      <div id="liveHijri" class="clock-hijri">Takwim Hijrah</div>
+    </div>
+    <button id="btnOpenCalendar" class="cal-trigger-btn" aria-label="Buka Kalendar">
+      <span>📅</span>
+      <span>Takwim Kalendar</span>
+    </button>
+  </section>
+
+  <!-- Quick App Launchpad (DELIMa 3.0 Ecosystem) -->
+  <section class="launchpad-section">
+    <div class="launchpad-card">
+      <div class="launchpad-header">
+        <div class="launchpad-title">
+          <span>🚀</span>
+          <span>Akses Pantas Aplikasi DELIMa 3.0 (KPM)</span>
+        </div>
+        <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" style="font-size:0.8rem;color:var(--primary);font-weight:700;text-decoration:none;">
+          Buka Semua Portal ↗
+        </a>
+      </div>
+      <div class="launchpad-grid">
+        <a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" class="app-tile">
+          <span class="app-tile-icon">💻</span>
+          <span class="app-tile-name">Google Classroom</span>
+          <span class="app-tile-tag">Tugasan PdP</span>
+        </a>
+        <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer" class="app-tile">
+          <span class="app-tile-icon">📹</span>
+          <span class="app-tile-name">Google Meet</span>
+          <span class="app-tile-tag">Kelas Maya</span>
+        </a>
+        <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" class="app-tile">
+          <span class="app-tile-icon">📚</span>
+          <span class="app-tile-name">Buku Teks</span>
+          <span class="app-tile-tag">Digital KPM</span>
+        </a>
+        <a href="https://www.canva.com/edu-signup" target="_blank" rel="noopener noreferrer" class="app-tile">
+          <span class="app-tile-icon">🎨</span>
+          <span class="app-tile-name">Canva Edu</span>
+          <span class="app-tile-tag">Kreativiti</span>
+        </a>
+        <a href="https://quizizz.com" target="_blank" rel="noopener noreferrer" class="app-tile">
+          <span class="app-tile-icon">🎮</span>
+          <span class="app-tile-name">Quizizz</span>
+          <span class="app-tile-tag">Kuiz Interaktif</span>
+        </a>
+        <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="app-tile">
+          <span class="app-tile-icon">📁</span>
+          <span class="app-tile-name">Google Drive</span>
+          <span class="app-tile-tag">Storan Murid</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Search & Results Wrapper -->
   <main class="main-wrapper">
 
-    <!-- PWA Install Banner -->
-    <div id="installBanner" class="install-banner" style="display:none;">
-      <div class="install-info">
-        <h3>📲 Pasang Aplikasi ke Telefon Anda</h3>
-        <p>Akses lebih pantas terus dari skrin telefon tanpa perlu membuka pelayar web setiap kali.</p>
+    <!-- PWA Install Notice Banner -->
+    <div id="installBanner" class="card-box" style="display:none;background:linear-gradient(135deg, #1e3a8a, #0f172a);color:#ffffff;border:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <h3 style="font-size:1.05rem;font-weight:800;">📲 Pasang Aplikasi Ini di Skrin Telefon</h3>
+          <p style="font-size:0.85rem;color:#cbd5e1;">Boleh dibuka terus tanpa menaip pautan pelayar web setiap kali.</p>
+        </div>
+        <button id="btnInstall" class="pwa-chip-btn" style="padding:0.6rem 1.25rem;">Pasang Sekarang</button>
       </div>
-      <button id="btnInstall" class="btn-install">Pasang Sekarang</button>
     </div>
 
-    <!-- Search Section Card -->
-    <section class="card-box">
+    <!-- Search Box Card -->
+    <section class="card-box" aria-label="Kotak Carian Murid">
       <!-- Tabs Navigation -->
       <div class="tabs-nav" role="tablist">
         <button id="tabKp" class="tab-btn active" role="tab" aria-selected="true">
@@ -103,16 +183,18 @@
               type="search" 
               id="inputKp" 
               class="text-input" 
-              placeholder="Cth: 190903120901 atau 190903-12-0901" 
+              placeholder="Contoh: 190903120901 atau 190903-12-0901" 
               autocomplete="off" 
               inputmode="numeric"
               aria-label="Nombor Kad Pengenalan Murid"
             >
-            <button id="clearKp" class="clear-btn" aria-label="Padam">✕</button>
+            <div class="input-controls">
+              <button id="clearKp" class="btn-input-action clear-btn" title="Padam Input" aria-label="Padam">✕</button>
+            </div>
           </div>
           <p class="helper-text">
             <span>💡</span>
-            <span>Masukkan No. Kad Pengenalan 12-digit (dengan atau tanpa tanda sempang).</span>
+            <span>Masukkan 12 digit nombor KP anak anda untuk semakan terus kad murid.</span>
           </p>
         </div>
       </div>
@@ -129,7 +211,7 @@
           </div>
         </div>
 
-        <!-- Quick Year Chips -->
+        <!-- Quick Year Filter Chips -->
         <div id="chipsContainer" class="chips-scroll">
           <button class="chip-btn active" data-year="all">Semua Tahun</button>
           <button class="chip-btn" data-year="1">Tahun 1</button>
@@ -152,7 +234,10 @@
               autocomplete="off"
               aria-label="Nama Murid"
             >
-            <button id="clearNama" class="clear-btn" aria-label="Padam">✕</button>
+            <div class="input-controls">
+              <button id="btnVoiceSearch" class="btn-input-action" title="Carian Suara (Bercakap Nama Anak)" aria-label="Carian Suara">🎙️</button>
+              <button id="clearNama" class="btn-input-action clear-btn" title="Padam Input" aria-label="Padam">✕</button>
+            </div>
           </div>
         </div>
       </div>
@@ -160,8 +245,13 @@
 
     <!-- Results Meta -->
     <div class="results-meta">
-      <div id="resultsCount" class="results-count">Sedia untuk semakan</div>
-      <div class="sort-label">SK Ranggu • 2026</div>
+      <div id="resultsCount" class="results-count">
+        <span>📋</span>
+        <span>Sedia untuk semakan</span>
+      </div>
+      <div style="font-size:0.82rem;font-weight:700;color:var(--text-muted);">
+        SK Ranggu (XBA3037) • Sesi 2026
+      </div>
     </div>
 
     <!-- Student Cards Container -->
@@ -172,7 +262,7 @@
       <span class="state-icon">🔎</span>
       <h3 class="state-title">Semak ID DELIMa Anak Anda</h3>
       <p class="state-desc">
-        Sila masukkan <strong>No. Kad Pengenalan / MyKid</strong> murid pada kotak carian di atas untuk mendapatkan ID DELIMa dan Kata Laluan dengan pantas.
+        Sila masukkan <strong>No. Kad Pengenalan / MyKid</strong> murid pada kotak carian di atas untuk mendapatkan ID DELIMa, Kata Laluan, atau menjana <strong>Kad Pelajar Digital</strong>.
       </p>
     </div>
 
@@ -181,71 +271,179 @@
       <span class="state-icon">😕</span>
       <h3 class="state-title">Tiada Rekod Dijumpai</h3>
       <p class="state-desc">
-        Pastikan ejaan nama atau nombor Kad Pengenalan yang dimasukkan adalah tepat. Jika masih tiada, sila hubungi Guru Kelas anak anda.
+        Sila semak semula nombor kad pengenalan atau ejaan nama yang dimasukkan. Jika anak anda murid baharu, sila hubungi guru kelas untuk pendaftaran akaun.
       </p>
     </div>
 
     <!-- Quick Guide Card -->
-    <section class="guide-card">
-      <h3 class="guide-title">
+    <section class="card-box" style="margin-top:2rem;">
+      <h3 style="font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
         <span>📖</span>
-        <span>Panduan Log Masuk Portal DELIMa 3.0</span>
+        <span>Langkah Log Masuk Portal DELIMa 3.0</span>
       </h3>
-      <div class="steps-list">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-text">
-            <h4>Cari Maklumat Anak</h4>
-            <p>Gunakan carian No. Kad Pengenalan atau nama anak anda di atas, kemudian tekan butang <strong>📋 Salin ID</strong>.</p>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:flex;gap:0.85rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div>
+            <h4 style="font-size:0.92rem;font-weight:700;">Salin ID & Kata Laluan</h4>
+            <p style="font-size:0.84rem;color:var(--text-muted);">Cari nama atau No. KP anak anda, kemudian tekan butang <strong>📋 Salin ID</strong>.</p>
           </div>
         </div>
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-text">
-            <h4>Buka Portal DELIMa 3.0</h4>
-            <p>Tekan butang <strong>🚀 Buka DELIMa 3.0</strong> atau layari pautan rasmi <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-weight:600;">d3.delima.edu.my/applications</a>.</p>
+        <div style="display:flex;gap:0.85rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div>
+            <h4 style="font-size:0.92rem;font-weight:700;">Buka Portal DELIMa 3.0</h4>
+            <p style="font-size:0.84rem;color:var(--text-muted);">Tekan butang <strong>🚀 Buka DELIMa 3.0</strong> pada kad murid atau layari <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-weight:700;">d3.delima.edu.my/applications</a>.</p>
           </div>
         </div>
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-text">
-            <h4>Log Masuk Menggunakan Google</h4>
-            <p>Pilih pilihan <em>Sign in with Google</em> dan masukkan ID DELIMa (cth: <code>m-xxxxxxx@moe-dl.edu.my</code>).</p>
+        <div style="display:flex;gap:0.85rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div>
+            <h4 style="font-size:0.92rem;font-weight:700;">Pilih "Sign In with Google"</h4>
+            <p style="font-size:0.84rem;color:var(--text-muted);">Tampal ID DELIMa anak (berakhir dengan <code>@moe-dl.edu.my</code>) dan masukkan kata laluan yang disalin.</p>
           </div>
         </div>
-        <div class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-text">
-            <h4>Masukkan Kata Laluan</h4>
-            <p>Kembali ke sini, salin Kata Laluan yang dipaparkan dan tampal (paste) pada ruangan kata laluan Google. Jika log masuk kali pertama, sistem Google akan meminta anda mencipta kata laluan baharu.</p>
+      </div>
+    </section>
+
+    <!-- Developer Profile Section (Pembangun Sistem) -->
+    <section class="dev-card" aria-label="Maklumat Pembangun Sistem">
+      <div class="dev-content">
+        <div class="dev-avatar">👨🏻‍💻</div>
+        <div class="dev-info">
+          <h3>Dibangunkan oleh Momon (momon-ux)</h3>
+          <p>Unit Pengurusan Data & ICT SK Ranggu Tawau, Sabah</p>
+          <div class="dev-badge-row">
+            <span class="dev-badge">Kod Sekolah: XBA3037</span>
+            <span class="dev-badge">Versi: 2.5 Deluxe PWA</span>
+            <span class="dev-badge">DELIMa 3.0 KPM</span>
           </div>
+        </div>
+        <div class="dev-actions">
+          <a href="https://github.com/momon-ux" target="_blank" rel="noopener noreferrer" class="btn-github">
+            <span>🐙</span>
+            <span>Profil GitHub</span>
+          </a>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- Printable Digital Student ID Card Modal -->
+  <div id="printableSlipModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="slipModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="slipModalTitle">Kad Pelajar Digital DELIMa 3.0</h3>
+        <button id="closeSlipModal" class="close-btn" aria-label="Tutup">&times;</button>
+      </div>
+
+      <!-- The Digital ID Card Preview -->
+      <div id="slipCardArea" class="digital-id-card">
+        <div class="slip-header">
+          <div class="slip-logos">
+            <img src="assets/logo-kpm.png" alt="Logo KPM" class="slip-logo-img">
+            <img src="assets/logo-skrg.png" alt="Logo SK Ranggu" class="slip-logo-img">
+          </div>
+          <div class="slip-title-text">
+            <h4>SK RANGGU, TAWAU</h4>
+            <p>PORTAL DELIMa 3.0 KPM</p>
+          </div>
+        </div>
+
+        <div class="slip-body">
+          <div class="slip-details">
+            <div id="slipNama" class="slip-student-name">NAMA MURID</div>
+            <span id="slipKelas" class="slip-class-pill">KELAS</span>
+
+            <div class="slip-info-row">
+              <span>No. KP: </span>
+              <strong id="slipKp">-</strong>
+            </div>
+            <div class="slip-info-row">
+              <span>ID DELIMa: </span><br>
+              <strong id="slipIdDelima" style="font-family:monospace;font-size:0.85rem;">-</strong>
+            </div>
+            <div class="slip-info-row">
+              <span>Kata Laluan: </span>
+              <strong id="slipPassword" style="font-family:monospace;background:rgba(0,0,0,0.25);padding:2px 6px;border-radius:4px;">-</strong>
+            </div>
+          </div>
+
+          <div class="slip-qr-box">
+            <div id="slipQrCode"></div>
+            <p>DELIMa 3.0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Action Buttons -->
+      <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+        <button id="btnPrintSlip" class="btn-primary btn-print-action">
+          <span>🖨️</span>
+          <span>Cetak / Simpan PDF</span>
+        </button>
+        <button id="btnShareSlipWa" class="btn-card-secondary btn-whatsapp btn-print-action">
+          <span>📱</span>
+          <span>WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Calendar Modal -->
+  <div id="calendarModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="calModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="calModalTitle">Takwim Persekolahan & Kalendar</h3>
+        <button id="closeCalModal" class="close-btn" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <button id="btnPrevMonth" class="btn-mini">◀ Bulan Lepas</button>
+        <h4 id="calMonthYearTitle" style="font-weight:800;font-size:1rem;color:var(--primary);">Oktober 2026</h4>
+        <button id="btnNextMonth" class="btn-mini">Bulan Depan ▶</button>
+      </div>
+
+      <div class="cal-grid">
+        <div class="cal-day-name">Aha</div>
+        <div class="cal-day-name">Isn</div>
+        <div class="cal-day-name">Sel</div>
+        <div class="cal-day-name">Rab</div>
+        <div class="cal-day-name">Kha</div>
+        <div class="cal-day-name">Jum</div>
+        <div class="cal-day-name">Sab</div>
+      </div>
+      <div id="calDaysGrid" class="cal-grid"></div>
+
+      <div style="margin-top:1.25rem;background:var(--bg-card-subtle);padding:0.85rem;border-radius:var(--radius-md);font-size:0.8rem;border:1px solid var(--border);">
+        <p style="font-weight:700;color:var(--text-main);">📌 Nota Persekolahan SK Ranggu:</p>
+        <p style="color:var(--text-muted);margin-top:0.25rem;">Hari berwarna biru menandakan hari ini. Gunakan ID DELIMa anak anda untuk latihan secara maya di rumah.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Help / Info Modal -->
   <div id="helpModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 id="helpModalTitle">Bantuan & Maklumat DELIMa 3.0</h3>
+        <h3 id="helpModalTitle">Bantuan & FAQ DELIMa 3.0</h3>
         <button id="closeHelp" class="close-btn" aria-label="Tutup">&times;</button>
       </div>
       <div style="font-size:0.9rem;color:var(--text-main);line-height:1.6;">
         <p style="margin-bottom:1rem;">
-          <strong>DELIMa (Digital Educational Learning Initiative Malaysia)</strong> adalah platform pembelajaran digital rasmi oleh Kementerian Pendidikan Malaysia (KPM).
+          <strong>DELIMa 3.0</strong> ialah inisiatif pembelajaran digital rasmi oleh Kementerian Pendidikan Malaysia (KPM).
         </p>
-        <h4 style="font-weight:700;margin-bottom:0.4rem;color:var(--primary);">❓ Lupa Kata Laluan / Masalah Log Masuk?</h4>
+        <h4 style="font-weight:700;margin-bottom:0.3rem;color:var(--primary);">❓ Lupa Kata Laluan?</h4>
         <p style="margin-bottom:1rem;color:var(--text-muted);">
-          Jika kata laluan telah ditukar sebelum ini dan terlupa, sila hubungi Guru Kelas atau Guru Penyelaras ICT / Guru Data SK Ranggu untuk bantuan reset kata laluan.
+          Jika kata laluan telah ditukar sebelum ini dan terlupa, sila hubungi Guru Kelas atau Guru Penyelaras ICT SK Ranggu untuk penetapan semula (*reset*).
         </p>
-        <h4 style="font-weight:700;margin-bottom:0.4rem;color:var(--primary);">📱 Keselamatan Data</h4>
+        <h4 style="font-weight:700;margin-bottom:0.3rem;color:var(--primary);">🪪 Kad Pelajar Digital</h4>
         <p style="margin-bottom:1rem;color:var(--text-muted);">
-          Aplikasi ini dipasang sebagai Progressive Web App (PWA) yang berjalan sepenuhnya di telefon anda. Tiada data disimpan di pelayan luar yang tidak dibenarkan.
+          Tekan butang <strong>"Jana Kad Digital"</strong> pada mana-mana kad murid untuk mencetak slip maklumat DELIMa beserta kod QR yang boleh ditampal pada meja belajar anak.
         </p>
-        <div style="background:var(--primary-light);padding:1rem;border-radius:var(--radius-md);margin-top:1rem;">
-          <p style="font-size:0.85rem;font-weight:600;color:var(--primary-dark);">
+        <div style="background:var(--primary-light);padding:0.85rem;border-radius:var(--radius-md);margin-top:0.75rem;">
+          <p style="font-size:0.85rem;font-weight:700;color:var(--primary-dark);">
             Pautan Rasmi DELIMa: <br>
             <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:underline;">
               https://d3.delima.edu.my/applications
@@ -256,21 +454,20 @@
     </div>
   </div>
 
-  <!-- iOS PWA Install Modal Guide -->
+  <!-- iOS Install Modal Guide -->
   <div id="iosModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="iosModalTitle">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 id="iosModalTitle">Cara Pasang pada iPhone / iPad (iOS)</h3>
+        <h3 id="iosModalTitle">Cara Pasang pada iPhone / iPad</h3>
         <button id="closeIosModal" class="close-btn" aria-label="Tutup">&times;</button>
       </div>
       <div style="font-size:0.9rem;color:var(--text-main);line-height:1.6;">
-        <p style="margin-bottom:1rem;">Untuk memasang aplikasi ini pada peranti Apple (iOS Safari):</p>
-        <ol style="padding-left:1.25rem;margin-bottom:1.25rem;">
-          <li style="margin-bottom:0.6rem;">Tekan ikon <strong>Kongsi (Share)</strong> di bahagian bawah Safari (kotak dengan anak panah ke atas: ⎋).</li>
-          <li style="margin-bottom:0.6rem;">Skrol ke bawah dan pilih <strong>"Add to Home Screen" (Tambah ke Skrin Utama)</strong> ➕.</li>
+        <ol style="padding-left:1.25rem;margin-bottom:1rem;">
+          <li style="margin-bottom:0.6rem;">Tekan ikon <strong>Kongsi (Share)</strong> di bahagian bawah Safari (ikon kotak beranak panah ke atas: ⎋).</li>
+          <li style="margin-bottom:0.6rem;">Pilih <strong>"Add to Home Screen" (Tambah ke Skrin Utama)</strong> ➕.</li>
           <li>Tekan <strong>"Add" (Tambah)</strong> di penjuru kanan atas.</li>
         </ol>
-        <p style="color:var(--text-muted);font-size:0.85rem;">Aplikasi DELIMa ID akan muncul di skrin utama telefon anda seperti aplikasi biasa!</p>
+        <p style="color:var(--text-muted);font-size:0.82rem;">Aplikasi DELIMa SKRG akan muncul di skrin utama telefon anda seperti aplikasi biasa.</p>
       </div>
     </div>
   </div>
@@ -280,16 +477,20 @@
 
   <!-- Footer Section -->
   <footer class="app-footer">
-    <p>Aplikasi Progressive Web App (PWA) untuk SK Ranggu, Tawau, Sabah (Kod: XBA3037)</p>
-    <div class="footer-links">
-      <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer">Portal DELIMa 3.0</a>
+    <p>Aplikasi Progressive Web App (PWA) SK Ranggu, Tawau, Sabah (Kod: XBA3037)</p>
+    <p style="margin-top:0.35rem;font-size:0.78rem;color:var(--text-light);">
+      Dibangunkan oleh <strong>Momon (momon-ux)</strong> • Dikuasakan oleh Antigravity AI
+    </p>
+    <div style="display:flex;justify-content:center;gap:1rem;margin-top:0.6rem;">
+      <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:none;font-weight:700;">Portal DELIMa 3.0</a>
       <span>•</span>
-      <a href="https://moe.gov.my" target="_blank" rel="noopener noreferrer">Kementerian Pendidikan Malaysia</a>
+      <a href="https://github.com/momon-ux/delima-sk-ranggu" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:none;font-weight:700;">GitHub Repositori</a>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="data.js"></script>
+  <script src="qrcode.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

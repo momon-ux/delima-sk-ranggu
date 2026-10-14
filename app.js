@@ -1,8 +1,9 @@
-// DELIMa 3.0 PWA Logic & Search Engine
-// Dikemaskini untuk SK Ranggu (XBA3037)
+// DELIMa 3.0 PWA Deluxe Engine & Logic
+// SK Ranggu, Tawau (XBA3037)
+// Pembangun: Momon (momon-ux)
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Elements
+  // Elements - Search & Filter
   const tabKp = document.getElementById('tabKp');
   const tabName = document.getElementById('tabName');
   const sectionKp = document.getElementById('sectionKp');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectKelas = document.getElementById('selectKelas');
   const inputNama = document.getElementById('inputNama');
   const clearNama = document.getElementById('clearNama');
+  const btnVoiceSearch = document.getElementById('btnVoiceSearch');
   const chipsContainer = document.getElementById('chipsContainer');
   
   const resultsContainer = document.getElementById('resultsContainer');
@@ -21,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const welcomeState = document.getElementById('welcomeState');
   const emptyState = document.getElementById('emptyState');
   
+  // Header & Modals
+  const greetingText = document.getElementById('greetingText');
   const themeToggle = document.getElementById('themeToggle');
   const btnHelp = document.getElementById('btnHelp');
   const helpModal = document.getElementById('helpModal');
@@ -33,13 +37,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const iosModal = document.getElementById('iosModal');
   const closeIosModal = document.getElementById('closeIosModal');
 
-  let currentTab = 'kp'; // 'kp' or 'name'
-  let activeYearFilter = null; // null or 1-6
-  let deferredPrompt = null;
-  let visibleLimit = 30; // limit cards rendered initially for max speed
-  let currentMatchedStudents = [];
+  // Realtime Clock & Calendar Elements
+  const liveClock = document.getElementById('liveClock');
+  const liveDate = document.getElementById('liveDate');
+  const liveHijri = document.getElementById('liveHijri');
+  const btnOpenCalendar = document.getElementById('btnOpenCalendar');
+  const calendarModal = document.getElementById('calendarModal');
+  const closeCalModal = document.getElementById('closeCalModal');
+  const calMonthYearTitle = document.getElementById('calMonthYearTitle');
+  const calDaysGrid = document.getElementById('calDaysGrid');
+  const btnPrevMonth = document.getElementById('btnPrevMonth');
+  const btnNextMonth = document.getElementById('btnNextMonth');
 
-  // 1. Initial Data Prep
+  // Printable Digital Student Card Elements
+  const printableSlipModal = document.getElementById('printableSlipModal');
+  const closeSlipModal = document.getElementById('closeSlipModal');
+  const slipNama = document.getElementById('slipNama');
+  const slipKelas = document.getElementById('slipKelas');
+  const slipKp = document.getElementById('slipKp');
+  const slipIdDelima = document.getElementById('slipIdDelima');
+  const slipPassword = document.getElementById('slipPassword');
+  const slipQrCode = document.getElementById('slipQrCode');
+  const btnPrintSlip = document.getElementById('btnPrintSlip');
+  const btnShareSlipWa = document.getElementById('btnShareSlipWa');
+
+  let currentTab = 'kp';
+  let activeYearFilter = null;
+  let deferredPrompt = null;
+  let visibleLimit = 30;
+  let currentMatchedStudents = [];
+  let currentCardStudent = null;
+  let calCurrentDate = new Date();
+
+  // 1. Data Prep
   const students = (typeof STUDENTS_DATA !== 'undefined' ? STUDENTS_DATA : []).map(s => {
     return {
       ...s,
@@ -59,49 +89,203 @@ document.addEventListener('DOMContentLoaded', () => {
     selectKelas.appendChild(opt);
   });
 
-  // 2. Service Worker Registration
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => {
-          console.log('[PWA] Service Worker registered:', reg.scope);
-        })
-        .catch(err => {
-          console.warn('[PWA] Service Worker failed:', err);
+  // 2. Real-Time Clock & Dynamic Greeting
+  const namaBulan = ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'];
+  const namaHari = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
+
+  function updateLiveClock() {
+    const now = new Date();
+    
+    // Time formatted with AM/PM
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    if (liveClock) {
+      liveClock.textContent = `${String(displayHours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    // Dynamic Greeting
+    if (greetingText) {
+      let ucapan = 'Selamat Datang';
+      if (hours >= 5 && hours < 12) ucapan = 'Selamat Pagi';
+      else if (hours >= 12 && hours < 14) ucapan = 'Selamat Tengah Hari';
+      else if (hours >= 14 && hours < 19) ucapan = 'Selamat Petang';
+      else ucapan = 'Selamat Malam';
+      greetingText.innerHTML = `<span>👋</span><span>${ucapan}, Warga SK Ranggu</span>`;
+    }
+
+    // Date
+    const dayName = namaHari[now.getDay()];
+    const dayDate = now.getDate();
+    const monthName = namaBulan[now.getMonth()];
+    const year = now.getFullYear();
+    if (liveDate) {
+      liveDate.textContent = `${dayName}, ${dayDate} ${monthName} ${year}`;
+    }
+
+    // Hijri Date Calculation (Approximate Intl)
+    if (liveHijri) {
+      try {
+        const hijriFormatter = new Intl.DateTimeFormat('ms-u-ca-islamic-umalqura', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
         });
+        liveHijri.textContent = `${hijriFormatter.format(now)} Hijrah`;
+      } catch (e) {
+        liveHijri.textContent = 'Sesi Persekolahan 2026';
+      }
+    }
+  }
+
+  setInterval(updateLiveClock, 1000);
+  updateLiveClock();
+
+  // 3. Interactive Calendar
+  function renderCalendar(dateObj) {
+    if (!calDaysGrid) return;
+    calDaysGrid.innerHTML = '';
+    
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth();
+    
+    if (calMonthYearTitle) {
+      calMonthYearTitle.textContent = `${namaBulan[month]} ${year}`;
+    }
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    // Empty cells for offset
+    for (let i = 0; i < firstDay; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.className = 'cal-day-cell empty';
+      calDaysGrid.appendChild(emptyCell);
+    }
+
+    // Days of month
+    for (let day = 1; day <= totalDays; day++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-day-cell';
+      cell.textContent = day;
+
+      if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+        cell.classList.add('today');
+        cell.title = 'Hari Ini';
+      }
+
+      calDaysGrid.appendChild(cell);
+    }
+  }
+
+  if (btnOpenCalendar) {
+    btnOpenCalendar.addEventListener('click', () => {
+      renderCalendar(calCurrentDate);
+      calendarModal.classList.add('active');
     });
   }
 
-  // Offline / Online Detection
+  if (closeCalModal) {
+    closeCalModal.addEventListener('click', () => calendarModal.classList.remove('active'));
+  }
+  if (calendarModal) {
+    calendarModal.addEventListener('click', (e) => {
+      if (e.target === calendarModal) calendarModal.classList.remove('active');
+    });
+  }
+
+  if (btnPrevMonth) {
+    btnPrevMonth.addEventListener('click', () => {
+      calCurrentDate.setMonth(calCurrentDate.getMonth() - 1);
+      renderCalendar(calCurrentDate);
+    });
+  }
+  if (btnNextMonth) {
+    btnNextMonth.addEventListener('click', () => {
+      calCurrentDate.setMonth(calCurrentDate.getMonth() + 1);
+      renderCalendar(calCurrentDate);
+    });
+  }
+
+  // 4. Voice Search (Web Speech API)
+  if (btnVoiceSearch) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ms-MY';
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        btnVoiceSearch.textContent = '🔴';
+        showToast('Sila sebut nama anak anda sekarang...');
+      };
+
+      recognition.onresult = (e) => {
+        const spokenText = e.results[0][0].transcript;
+        inputNama.value = spokenText;
+        clearNama.style.display = 'block';
+        showToast(`Mencari: "${spokenText}"`);
+        handleSearch();
+      };
+
+      recognition.onerror = () => {
+        btnVoiceSearch.textContent = '🎙️';
+        showToast('Suara tidak dikesan, sila cuba lagi.');
+      };
+
+      recognition.onend = () => {
+        btnVoiceSearch.textContent = '🎙️';
+      };
+
+      btnVoiceSearch.addEventListener('click', () => {
+        try {
+          recognition.start();
+        } catch (err) {
+          recognition.stop();
+        }
+      });
+    } else {
+      btnVoiceSearch.style.display = 'none'; // Not supported on current browser
+    }
+  }
+
+  // 5. Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('[PWA] Service Worker aktif:', reg.scope))
+        .catch(err => console.warn('[PWA] SW ralat:', err));
+    });
+  }
+
+  // Online / Offline Status
   function updateOnlineStatus() {
     if (navigator.onLine) {
-      offlineIndicator.style.display = 'none';
+      if (offlineIndicator) offlineIndicator.style.display = 'none';
     } else {
-      offlineIndicator.style.display = 'block';
-      showToast('Mod Luar Talian (Offline) Aktif. Data tersimpan masih boleh disemak.');
+      if (offlineIndicator) offlineIndicator.style.display = 'block';
+      showToast('Mod Luar Talian (Offline) Aktif. Rekod masih boleh disemak.');
     }
   }
   window.addEventListener('online', updateOnlineStatus);
   window.addEventListener('offline', updateOnlineStatus);
   updateOnlineStatus();
 
-  // 3. PWA Installation Handler
-  const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-  };
+  // 6. PWA Installation
+  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
   const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    if (installBanner) installBanner.style.display = 'flex';
-    if (btnHeaderInstall) btnHeaderInstall.style.display = 'flex';
+    if (installBanner) installBanner.style.display = 'block';
+    if (btnHeaderInstall) btnHeaderInstall.style.display = 'inline-flex';
   });
 
-  if (btnInstall) {
-    btnInstall.addEventListener('click', triggerInstall);
-  }
+  if (btnInstall) btnInstall.addEventListener('click', triggerInstall);
   if (btnHeaderInstall) {
     btnHeaderInstall.addEventListener('click', () => {
       if (isIos() && !isInStandaloneMode()) {
@@ -117,19 +301,19 @@ document.addEventListener('DOMContentLoaded', () => {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted install');
           if (installBanner) installBanner.style.display = 'none';
+          if (btnHeaderInstall) btnHeaderInstall.style.display = 'none';
         }
         deferredPrompt = null;
       });
     } else if (isIos() && !isInStandaloneMode()) {
       iosModal.classList.add('active');
     } else {
-      showToast('Untuk pasang di skrin telefon, tekan menu pelayar (tiga titik ⋮) dan pilih "Pasang / Tambah ke Skrin Utama".');
+      showToast('Tekan ikon menu ⋮ pada pelayar dan pilih "Install app / Tambah ke Skrin Utama".');
     }
   }
 
-  // 4. Tab Switching
+  // 7. Tabs & Filter Handlers
   tabKp.addEventListener('click', () => {
     currentTab = 'kp';
     tabKp.classList.add('active');
@@ -150,7 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
     handleSearch();
   });
 
-  // 5. Input Clear Buttons
   inputKp.addEventListener('input', () => {
     clearKp.style.display = inputKp.value ? 'block' : 'none';
     handleSearch();
@@ -173,11 +356,8 @@ document.addEventListener('DOMContentLoaded', () => {
     handleSearch();
   });
 
-  selectKelas.addEventListener('change', () => {
-    handleSearch();
-  });
+  selectKelas.addEventListener('change', handleSearch);
 
-  // Year filter chips
   if (chipsContainer) {
     chipsContainer.addEventListener('click', (e) => {
       const chip = e.target.closest('.chip-btn');
@@ -197,9 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Search Algorithm
+  // 8. Search Engine
   function handleSearch() {
-    visibleLimit = 30; // reset pagination limit
+    visibleLimit = 30;
     let matched = [];
 
     if (currentTab === 'kp') {
@@ -207,17 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const query = rawKp.replace(/[^0-9A-Za-z]/g, '').toLowerCase();
 
       if (!query) {
-        // Show welcome state
         renderState('welcome');
         return;
       }
 
       matched = students.filter(s => {
-        // Check IC or Student ID
         return s.clean_kp.includes(query) || s.clean_id_murid.includes(query);
       });
     } else {
-      // Tab Name & Class
       const nameQuery = inputNama.value.trim().toLowerCase();
       const selectedCls = selectKelas.value;
 
@@ -229,23 +406,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const nameWords = nameQuery ? nameQuery.split(/\s+/).filter(Boolean) : [];
 
       matched = students.filter(s => {
-        // Class filter
-        if (selectedCls && s.kelas !== selectedCls) {
-          return false;
-        }
-
-        // Year filter
-        if (activeYearFilter && s.tahun !== activeYearFilter) {
-          return false;
-        }
-
-        // Name filter (all query words must be present)
+        if (selectedCls && s.kelas !== selectedCls) return false;
+        if (activeYearFilter && s.tahun !== activeYearFilter) return false;
         if (nameWords.length > 0) {
           const fullName = s.lower_name;
           const matchAll = nameWords.every(word => fullName.includes(word));
           if (!matchAll) return false;
         }
-
         return true;
       });
     }
@@ -264,15 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (type === 'welcome') {
       welcomeState.style.display = 'block';
       emptyState.style.display = 'none';
-      resultsCount.textContent = 'Sedia untuk semakan';
+      resultsCount.innerHTML = `<span>📋</span><span>Sedia untuk semakan</span>`;
     } else if (type === 'empty') {
       welcomeState.style.display = 'none';
       emptyState.style.display = 'block';
-      resultsCount.textContent = '0 murid dijumpai';
+      resultsCount.innerHTML = `<span>❌</span><span>0 murid dijumpai</span>`;
     }
   }
 
-  // Format IC nicely with hyphen: 190903120901 -> 190903-12-0901
   function formatIC(ic) {
     if (!ic) return '<span style="color:var(--text-light);font-style:italic">Tiada rekod</span>';
     const digitsOnly = ic.replace(/[^0-9]/g, '');
@@ -282,11 +448,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return ic;
   }
 
-  // Render Student Cards
+  // 9. Card Generator
   function renderResults(list) {
     welcomeState.style.display = 'none';
     emptyState.style.display = 'none';
-    resultsCount.textContent = `${list.length} murid ditemui`;
+    resultsCount.innerHTML = `<span>✅</span><span>${list.length} murid ditemui</span>`;
 
     const displayList = list.slice(0, visibleLimit);
     resultsContainer.innerHTML = '';
@@ -301,16 +467,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     resultsContainer.appendChild(grid);
 
-    // If more results exist, append Load More button
     if (list.length > visibleLimit) {
       const loadMoreBox = document.createElement('div');
       loadMoreBox.style.textAlign = 'center';
-      loadMoreBox.style.margin = '1.5rem 0';
+      loadMoreBox.style.margin = '2rem 0';
 
       const btnMore = document.createElement('button');
       btnMore.className = 'btn-mini';
-      btnMore.style.padding = '0.75rem 1.5rem';
-      btnMore.style.fontSize = '0.9rem';
+      btnMore.style.padding = '0.85rem 1.75rem';
+      btnMore.style.fontSize = '0.95rem';
       btnMore.textContent = `Papar Lebih Banyak (${list.length - visibleLimit} lagi)`;
       btnMore.addEventListener('click', () => {
         visibleLimit += 30;
@@ -329,12 +494,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const yearClass = `badge-y${s.tahun || 1}`;
     const formattedKp = formatIC(s.no_kp);
     const pwd = s.password || `${s.nama.split(' ')[0]}@XBA3037`;
-    const pwdDisplay = s.password ? s.password : `<span style="color:var(--accent)">${pwd} (Cadangan)</span>`;
 
-    // WhatsApp Message Builder
+    // WhatsApp Message
     const waText = encodeURIComponent(
       `*MAKLUMAT AKAUN DELIMa 3.0*\n` +
-      `Sekolah: SK Ranggu (XBA3037)\n` +
+      `Sekolah: SK Ranggu Tawau (XBA3037)\n` +
       `Nama Murid: ${s.nama}\n` +
       `Kelas: ${s.kelas}\n` +
       `No. Kad Pengenalan: ${s.no_kp || '-'}\n` +
@@ -351,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="class-badge ${yearClass}">
           🎓 ${s.kelas}
         </span>
-        ${s.catatan ? `<span class="stat-pill" style="background:var(--accent-light);color:var(--accent);font-weight:700">⚠️ ${s.catatan}</span>` : ''}
+        ${s.catatan ? `<span class="dev-badge" style="background:var(--accent-light);color:var(--accent);font-weight:800">⚠️ ${s.catatan}</span>` : ''}
       </div>
 
       <h2 class="student-name">${s.nama}</h2>
@@ -372,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- ID DELIMa -->
         <div class="cred-item">
           <div class="cred-label">
-            <span>ID DELIMa (Emel Google)</span>
+            <span>ID DELIMa (Google Account)</span>
           </div>
           <div class="cred-display">
             <span class="cred-val" title="${s.id_delima}">${s.id_delima}</span>
@@ -387,10 +551,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Kata Laluan -->
         <div class="cred-item">
           <div class="cred-label">
-            <span>Kata Laluan Asal</span>
+            <span>Kata Laluan</span>
           </div>
           <div class="cred-display">
-            <span class="cred-val pwd-masked" data-actual="${s.password || pwd}">••••••••••••</span>
+            <span class="cred-val pwd-masked">••••••••••••</span>
             <div class="cred-actions">
               <button class="btn-mini btn-toggle-pwd" title="Papar/Sembunyi Kata Laluan">
                 👁️ Papar
@@ -405,23 +569,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <div class="card-actions">
         <a href="https://d3.delima.edu.my/applications" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          🚀 Buka DELIMa 3.0
+          🚀 Buka Portal DELIMa 3.0
         </a>
-        <a href="https://wa.me/?text=${waText}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" title="Kongsi maklumat ini melalui WhatsApp">
+        <button class="btn-card-secondary btn-open-slip" title="Jana Kad Pelajar Digital Beserta Kod QR">
+          🪪 Kad Digital
+        </button>
+        <a href="https://wa.me/?text=${waText}" target="_blank" rel="noopener noreferrer" class="btn-card-secondary btn-whatsapp" title="Kongsi maklumat ini melalui WhatsApp">
           📱 WhatsApp
         </a>
       </div>
     `;
 
-    // Attach Event Listeners for this card
+    // Event Handlers for Buttons
     const btnCopyId = card.querySelector('.btn-copy-id');
     btnCopyId.addEventListener('click', () => {
-      copyToClipboard(s.id_delima, btnCopyId, 'ID DELIMa berjaya disalin!');
+      copyToClipboard(s.id_delima, btnCopyId, 'ID DELIMa disalin!');
     });
 
     const btnCopyPwd = card.querySelector('.btn-copy-pwd');
     btnCopyPwd.addEventListener('click', () => {
-      copyToClipboard(s.password || pwd, btnCopyPwd, 'Kata Laluan berjaya disalin!');
+      copyToClipboard(s.password || pwd, btnCopyPwd, 'Kata Laluan disalin!');
     });
 
     const btnTogglePwd = card.querySelector('.btn-toggle-pwd');
@@ -439,18 +606,76 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Open Digital Student Card Slip
+    const btnOpenSlip = card.querySelector('.btn-open-slip');
+    btnOpenSlip.addEventListener('click', () => {
+      openDigitalCardModal(s, pwd);
+    });
+
     return card;
   }
 
-  // 7. Copy to Clipboard Functionality
+  // 10. Digital ID Card Modal with QR Code
+  function openDigitalCardModal(s, pwd) {
+    currentCardStudent = s;
+    slipNama.textContent = s.nama;
+    slipKelas.textContent = `🎓 ${s.kelas}`;
+    slipKp.textContent = formatIC(s.no_kp);
+    slipIdDelima.textContent = s.id_delima;
+    slipPassword.textContent = s.password || pwd;
+
+    // Generate QR Code
+    if (typeof QRCode !== 'undefined' && slipQrCode) {
+      slipQrCode.innerHTML = '';
+      new QRCode(slipQrCode, {
+        text: 'https://d3.delima.edu.my/applications',
+        width: 90,
+        height: 90,
+        colorDark: '#1e3a8a',
+        colorLight: '#ffffff'
+      });
+    }
+
+    // WhatsApp handler for card
+    btnShareSlipWa.onclick = () => {
+      const text = encodeURIComponent(
+        `*KAD PELAJAR DIGITAL DELIMa 3.0*\n` +
+        `Sekolah: SK Ranggu Tawau (XBA3037)\n` +
+        `Nama: ${s.nama}\n` +
+        `Kelas: ${s.kelas}\n` +
+        `No. KP: ${s.no_kp || '-'}\n` +
+        `ID DELIMa: ${s.id_delima}\n` +
+        `Kata Laluan: ${s.password || pwd}\n` +
+        `Pautan: https://d3.delima.edu.my/applications`
+      );
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    };
+
+    printableSlipModal.classList.add('active');
+  }
+
+  if (closeSlipModal) {
+    closeSlipModal.addEventListener('click', () => printableSlipModal.classList.remove('active'));
+  }
+  if (printableSlipModal) {
+    printableSlipModal.addEventListener('click', (e) => {
+      if (e.target === printableSlipModal) printableSlipModal.classList.remove('active');
+    });
+  }
+
+  if (btnPrintSlip) {
+    btnPrintSlip.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
+  // 11. Clipboard Utility
   function copyToClipboard(text, buttonElement, message) {
     if (!text) return;
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(text).then(() => {
         handleCopySuccess(buttonElement, message);
-      }).catch(() => {
-        fallbackCopyText(text, buttonElement, message);
-      });
+      }).catch(() => fallbackCopyText(text, buttonElement, message));
     } else {
       fallbackCopyText(text, buttonElement, message);
     }
@@ -461,7 +686,6 @@ document.addEventListener('DOMContentLoaded', () => {
     textArea.value = text;
     textArea.style.position = 'fixed';
     textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
@@ -469,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.execCommand('copy');
       handleCopySuccess(buttonElement, message);
     } catch (err) {
-      showToast('Gagal menyalin, sila salin secara manual.');
+      showToast('Gagal menyalin.');
     }
     document.body.removeChild(textArea);
   }
@@ -485,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
   }
 
-  // 8. Toast Alert
+  // 12. Toast Feedback
   function showToast(msg) {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -495,13 +719,13 @@ document.addEventListener('DOMContentLoaded', () => {
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = '0';
-      toast.style.transform = 'translateY(10px)';
+      toast.style.transform = 'translateY(15px)';
       toast.style.transition = 'all 0.3s ease';
       setTimeout(() => toast.remove(), 300);
     }, 3200);
   }
 
-  // 9. Theme Toggle (Dark/Light)
+  // 13. Theme Toggle
   const savedTheme = localStorage.getItem('delima_theme');
   if (savedTheme) {
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -523,31 +747,29 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
   }
 
-  // 10. Help Modal
+  // 14. Modals
   btnHelp.addEventListener('click', () => helpModal.classList.add('active'));
   closeHelp.addEventListener('click', () => helpModal.classList.remove('active'));
   helpModal.addEventListener('click', (e) => {
     if (e.target === helpModal) helpModal.classList.remove('active');
   });
 
-  // iOS Install Modal
-  if (closeIosModal) {
-    closeIosModal.addEventListener('click', () => iosModal.classList.remove('active'));
-  }
+  if (closeIosModal) closeIosModal.addEventListener('click', () => iosModal.classList.remove('active'));
   if (iosModal) {
     iosModal.addEventListener('click', (e) => {
       if (e.target === iosModal) iosModal.classList.remove('active');
     });
   }
 
-  // Escape key to close modals
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       helpModal.classList.remove('active');
       if (iosModal) iosModal.classList.remove('active');
+      if (calendarModal) calendarModal.classList.remove('active');
+      if (printableSlipModal) printableSlipModal.classList.remove('active');
     }
   });
 
-  // Initial render
+  // Initial Search State
   handleSearch();
 });

@@ -1,17 +1,20 @@
-const CACHE_NAME = 'delima-pwa-v1';
+const CACHE_NAME = 'delima-pwa-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './data.js',
+  './qrcode.js',
   './manifest.json',
+  './assets/logo-kpm.png',
+  './assets/logo-skrg.png',
+  './assets/logo-pwa.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/icon-maskable-192.png',
-  './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png',
   './icons/favicon-32.png',
+  './icons/favicon-64.png',
   './icons/icon.svg'
 ];
 
@@ -19,7 +22,7 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Pre-caching offline assets');
+      console.log('[ServiceWorker] Pre-caching offline assets v2');
       return cache.addAll(ASSETS_TO_CACHE);
     }).then(() => self.skipWaiting())
   );
@@ -43,13 +46,8 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Event - Stale-While-Revalidate Strategy
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests and local scheme
   if (event.request.method !== 'GET') return;
-  
-  // Ignore external links like delima.edu.my
-  if (!event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
+  if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
@@ -61,11 +59,8 @@ self.addEventListener('fetch', (event) => {
           });
         }
         return networkResponse;
-      }).catch(() => {
-        // Network failed, nothing to do since we fallback to cache
-      });
+      }).catch(() => {});
 
-      // Return cached response immediately if available, else wait for network
       return cachedResponse || fetchPromise;
     })
   );
