@@ -129,48 +129,51 @@ body {
 .logos-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .logo-badge {
   background: rgba(255, 255, 255, 0.95);
-  padding: 4px;
-  border-radius: 12px;
+  padding: 6px 10px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   transition: var(--transition);
 }
 
 .logo-badge:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px) scale(1.05);
 }
 
 .logo-img-kpm {
-  width: 38px;
-  height: 38px;
+  height: 48px;
+  width: auto;
+  max-width: 62px;
   object-fit: contain;
 }
 
 .logo-img-skrg {
-  width: 38px;
-  height: 38px;
+  height: 48px;
+  width: auto;
+  max-width: 62px;
   object-fit: contain;
 }
 
 .institution-text h2 {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #ffffff;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .institution-text p {
-  font-size: 0.72rem;
-  color: #cbd5e1;
+  font-size: 0.78rem;
+  color: #e2e8f0;
   font-weight: 600;
 }
 
@@ -1100,17 +1103,19 @@ body {
 
 .slip-logos {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.65rem;
   align-items: center;
 }
 
 .slip-logo-img {
-  width: 36px;
-  height: 36px;
+  height: 48px;
+  width: auto;
+  max-width: 60px;
   background: #ffffff;
-  border-radius: 8px;
-  padding: 2px;
+  border-radius: 10px;
+  padding: 4px;
   object-fit: contain;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .slip-title-text {
