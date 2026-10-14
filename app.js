@@ -1,6 +1,6 @@
 // DELIMa 3.0 PWA Deluxe Engine & Logic
-// SK Ranggu, Tawau (XBA3037)
-// Pembangun: Momon (momon-ux)
+// Pembangun Sistem: Mohammad Fikrey bin Abdul Gapar (momon-ux)
+// Unit Pengurusan Data & ICT SK Ranggu, Tawau (XBA3037)
 
 document.addEventListener('DOMContentLoaded', () => {
   // Elements - Search & Filter

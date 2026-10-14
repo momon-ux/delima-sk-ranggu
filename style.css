@@ -129,36 +129,38 @@ body {
 .logos-group {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .logo-badge {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 6px 10px;
-  border-radius: 14px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: none;
+  border: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
   transition: var(--transition);
 }
 
 .logo-badge:hover {
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-2px) scale(1.08);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
 }
 
 .logo-img-kpm {
-  height: 48px;
+  height: 54px;
   width: auto;
-  max-width: 62px;
+  max-width: 70px;
   object-fit: contain;
 }
 
 .logo-img-skrg {
-  height: 48px;
+  height: 54px;
   width: auto;
-  max-width: 62px;
+  max-width: 70px;
   object-fit: contain;
 }
 
@@ -235,14 +237,15 @@ body {
 }
 
 .pwa-main-logo {
-  width: 76px;
-  height: 76px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 5px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  width: 86px;
+  height: 86px;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.45));
   flex-shrink: 0;
-  border: 2px solid rgba(255, 255, 255, 0.4);
   animation: floatSoft 3s ease-in-out infinite;
 }
 
@@ -1108,14 +1111,15 @@ body {
 }
 
 .slip-logo-img {
-  height: 48px;
+  height: 52px;
   width: auto;
-  max-width: 60px;
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 4px;
+  max-width: 66px;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
   object-fit: contain;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
 }
 
 .slip-title-text {
