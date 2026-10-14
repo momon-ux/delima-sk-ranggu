@@ -1,4 +1,4 @@
-const CACHE_NAME = 'delima-pwa-v2';
+const CACHE_NAME = 'delima-pwa-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,7 +9,6 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './assets/logo-kpm.png',
   './assets/logo-skrg.png',
-  './assets/logo-pwa.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
