@@ -1,4 +1,4 @@
-const CACHE_NAME = 'delima-pwa-v4';
+const CACHE_NAME = 'delima-pwa-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -18,17 +18,18 @@ const ASSETS_TO_CACHE = [
   './icons/icon.svg'
 ];
 
-// Install Event - Pre-cache Assets
+// Install Event - Pre-cache Assets & skip waiting immediately
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Pre-caching offline assets v2');
+      console.log('[ServiceWorker] Pre-caching offline assets v5');
       return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
-// Activate Event - Clean Up Old Caches
+// Activate Event - Clean Up ALL Old Caches & claim clients immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keyList) => {
@@ -44,11 +45,32 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Stale-While-Revalidate Strategy
+// Fetch Event - Network-First for HTML/Navigations, Stale-While-Revalidate for Assets
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
 
+  const isNavOrHtml = event.request.mode === 'navigate' || 
+                      event.request.url.endsWith('/') || 
+                      event.request.url.includes('index.html');
+
+  if (isNavOrHtml) {
+    // Network-First for HTML so new updates are loaded instantly when online
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // Stale-While-Revalidate for other static assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {

@@ -3,6 +3,14 @@
 // Unit Pengurusan Data & ICT SK Ranggu, Tawau (XBA3037)
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Safeguard: Pastikan logo hero sentiasa Logo Rasmi DELIMa 3.0 (elak cache lapuk Safari memaparkan lencana sekolah dua kali)
+  const heroImg = document.querySelector('.hero-crest-wrapper img, .hero-box img');
+  if (heroImg && (heroImg.src.includes('logo-skrg.png') || heroImg.src.includes('logo-pwa.png'))) {
+    heroImg.src = 'assets/logo-delima.png';
+    heroImg.className = 'hero-delima-logo';
+    heroImg.alt = 'Logo Rasmi DELIMa 3.0 KPM';
+  }
+
   // Elements - Search & Filter
   const tabKp = document.getElementById('tabKp');
   const tabName = document.getElementById('tabName');
@@ -252,12 +260,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 5. Service Worker Registration
+  // 5. Service Worker Registration with Auto Update
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('[PWA] Service Worker aktif:', reg.scope))
+      navigator.serviceWorker.register('./sw.js?v=5')
+        .then(reg => {
+          console.log('[PWA] Service Worker aktif:', reg.scope);
+          reg.update(); // Paksa semakan versi baharu dari server
+          reg.onupdatefound = () => {
+            const installing = reg.installing;
+            if (installing) {
+              installing.onstatechange = () => {
+                if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[PWA] Versi baharu sedia, memuat semula...');
+                  window.location.reload();
+                }
+              };
+            }
+          };
+        })
         .catch(err => console.warn('[PWA] SW ralat:', err));
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
     });
   }
 
